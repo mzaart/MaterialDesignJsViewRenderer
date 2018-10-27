@@ -1,11 +1,10 @@
 package core.renderers
 
-import core.renderers.viewRenderers.ViewRenderer
-import core.views.Theme
-import core.views.events.Event
-import core.views.events.EventListener
+import core.renderers.viewRenderers.AbstractViewRenderer
+import core.views.View
 import core.views.layouts.Layout
 import di.inject
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
 import utils.ElementCss
 import kotlin.browser.document
@@ -13,6 +12,8 @@ import kotlin.browser.document
 object MaterialDesignJsRenderer: ViewTreeRenderer {
 
     private val contentRoot = document.getElementsByTagName("body")
+    private lateinit var rootLayout: Layout
+    private var isInitialized = false
 
     init {
         if (contentRoot.length != 1) {
@@ -20,9 +21,10 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
         }
     }
 
-    fun setRoot(layout: Layout) {
-        val layoutRenderer by inject<ViewRenderer<Layout>>(layout::class.simpleName)
-        val layoutElement = layoutRenderer.renderView(layout)
+    override fun setRoot(layout: Layout) {
+        rootLayout = layout
+        val layoutRenderer by inject<ViewRenderer<Layout>, View>(layout.name, layout)
+        val layoutElement = layoutRenderer.renderView()
 
         val css = ElementCss().apply {
             width = 100.0 to ElementCss.DimensionUnit.VIEWPORT_WIDTH
@@ -38,14 +40,27 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
 
         css.applyTo(layoutElement)
         contentRoot[0]!!.appendChild(layoutElement)
+        isInitialized = true
     }
 
-    override fun invalidate(viewId: Int) {
-        // todo optimize invalidations
-
+    override fun invalidate(view: View) {
+        if (isViewAttached(view)) {
+            val renderedElement = document.getElementById(view.id.toString())!! as HTMLElement
+            println(renderedElement)
+            val renderer by inject<ViewRenderer<*>, View, HTMLElement>(view.name, view, renderedElement)
+            renderer.renderView()
+        }
     }
 
-    override fun setEventListener(viewId: Int, event: Event, listener: EventListener) {
-        throw NotImplementedError()
+    private fun isViewAttached(view: View): Boolean {
+        if (!isInitialized) {
+            return false
+        }
+        var root = view
+        while (root.parent != null) {
+            root = root.parent!!
+        }
+
+        return rootLayout == root
     }
 }

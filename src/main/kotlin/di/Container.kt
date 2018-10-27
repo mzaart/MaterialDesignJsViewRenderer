@@ -1,15 +1,17 @@
 package di
 
-import core.renderers.DefaultTheme
-import core.renderers.RendererConfig
+import core.renderers.*
 import core.renderers.viewRenderers.inputs.ButtonRenderer
-import core.renderers.viewRenderers.ViewRenderer
 import core.renderers.viewRenderers.layouts.LinearLayoutRenderer
 import core.views.Theme
+import core.views.View
+import core.views.input.Button
+import core.views.layouts.LinearLayout
 import org.kodein.di.Kodein
 import org.kodein.di.erased.bind
-import org.kodein.di.erased.provider
+import org.kodein.di.erased.factory
 import org.kodein.di.erased.singleton
+import org.w3c.dom.HTMLElement
 
 object Container {
 
@@ -18,7 +20,12 @@ object Container {
         bind<RendererConfig>() with singleton { RendererConfig() }
         bind<Theme>() with singleton { DefaultTheme() }
 
-        bind<ViewRenderer<*>>("Button") with provider { ButtonRenderer() }
-        bind<ViewRenderer<*>>("LinearLayout") with provider { LinearLayoutRenderer() }
+        bind<ViewTreeRenderer>() with singleton { MaterialDesignJsRenderer }
+
+        bind<ViewRenderer<*>>("Button") with factory { v: View -> ButtonRenderer(v as Button) }
+        bind<ViewRenderer<*>>("LinearLayout") with factory { v: View -> LinearLayoutRenderer(v as LinearLayout) }
+
+        bind<ViewRenderer<*>>("Button") with factory { v: View, e: HTMLElement -> ButtonRenderer(v as Button, e) }
+        bind<ViewRenderer<*>>("LinearLayout") with factory { v: View, e: HTMLElement-> LinearLayoutRenderer(v as LinearLayout, e) }
     }
 }

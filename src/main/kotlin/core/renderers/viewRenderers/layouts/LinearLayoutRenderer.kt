@@ -1,19 +1,22 @@
 package core.renderers.viewRenderers.layouts
 
-import core.renderers.viewRenderers.ViewRenderer
-import core.views.Dimension
+import core.renderers.ViewRenderer
+import core.renderers.viewRenderers.AbstractViewRenderer
 import core.views.View
 import core.views.layouts.LinearLayout
 import di.inject
 import org.w3c.dom.HTMLElement
-import utils.ElementCss
-import utils.getGridSize
+import utils.extensions.children
+import utils.extensions.findChild
 import utils.mapBased.keys.HasKeys
 import utils.mapBased.keys.delegates.nullable.BoolRWKey
 import kotlin.browser.document
 
-
-class LinearLayoutRenderer: ViewRenderer<LinearLayout>() {
+class LinearLayoutRenderer(
+        view: LinearLayout,
+        element: HTMLElement,
+        reRendering: Boolean = true
+): AbstractViewRenderer<LinearLayout>(view, element, reRendering) {
 
     class LinearLayoutConfig: HasKeys() {
 
@@ -22,53 +25,42 @@ class LinearLayoutRenderer: ViewRenderer<LinearLayout>() {
         var isCard by BoolRWKey
     }
 
-    override val element = document.createElement("div") as HTMLElement
-
     // TODO
     var layoutConfig = LinearLayoutConfig()
 
-    override fun buildElement(view: LinearLayout) {
+    constructor(view: LinearLayout): this(view, document.createElement("div") as HTMLElement, false)
+
+    override fun buildElement() {
         val viewExtras = view.webExtras
         if (viewExtras != null) {
             layoutConfig.keys = viewExtras.keys
         }
 
-        renderChildren(view, element)
+        renderChildren()
     }
 
-    private fun renderChildren(layout: LinearLayout, element: HTMLElement) {
-        layout.children().forEach { c: View ->
-            val childRenderer by inject<ViewRenderer<View>>(c::class.simpleName)
-            val child = childRenderer.renderView(c)
+    private fun renderChildren() {
+        val renderedIds = element.children().map { c -> c.id.toInt() }.toSet()
+        val childIds = view.children().map { c -> c.id }.toSet()
+        println("Rendered Ids: " + renderedIds)
+        println("Child Ids: " + childIds)
 
-            val classes: MutableSet<String> = mutableSetOf()
-            val css = ElementCss()
+        val viewsToBeRendered = childIds - renderedIds
+        val viewsToBeRemoved = renderedIds - childIds
+        println("To be rendered: " + viewsToBeRendered)
+        println("To be removed: " + viewsToBeRemoved)
 
-            val width: Pair<Double, ElementCss.DimensionUnit>? = when (Dimension.type(c.width)) {
-                Dimension.Type.WRAP_CONTENT -> null
-                Dimension.Type.RELATIVE ->  c.width * 100 to ElementCss.DimensionUnit.RELATIVE
-                Dimension.Type.EXPLICIT -> c.width to ElementCss.DimensionUnit.PX
-            }
-            if (width != null) {
-                css.width = width
-            }
-
-            val height: Pair<Double, ElementCss.DimensionUnit>? = when (Dimension.type(c.height)) {
-                Dimension.Type.WRAP_CONTENT -> null
-                Dimension.Type.RELATIVE -> c.height * 100 to ElementCss.DimensionUnit.RELATIVE
-                Dimension.Type.EXPLICIT -> c.height to ElementCss.DimensionUnit.PX
-            }
-            if (height != null) {
-                css.height = height
-            }
-
-            child.className += " " + classes.joinToString(" ")
-            css.applyTo(child)
+        viewsToBeRendered.map { id -> view.find(id) }.forEach { c: View ->
+            val childRenderer by inject<ViewRenderer<View>, View>(c.name, c)
+            val child = childRenderer.renderView()
             element.appendChild(child)
-
-            if (layout.direction == LinearLayout.Direction.VERTICAL) {
+            if (view.direction == LinearLayout.Direction.VERTICAL) {
                 element.append(document.createElement("br"))
             }
+        }
+
+        viewsToBeRemoved.forEach { id ->
+            element.removeChild(element.findChild(id))
         }
     }
 }

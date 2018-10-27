@@ -1,16 +1,20 @@
 package core.renderers.viewRenderers.inputs
 
-import core.renderers.viewRenderers.ViewRenderer
+import core.renderers.viewRenderers.AbstractViewRenderer
 import core.views.input.Button
 import org.w3c.dom.HTMLElement
-import utils.addClasses
+import utils.extensions.addClasses
 import utils.extensions.nonNull
 import utils.mapBased.keys.HasKeys
 import utils.mapBased.keys.delegates.nullable.BoolRWKey
 import utils.mapBased.keys.delegates.nullable.EnumRWKey
 import kotlin.browser.document
 
-class ButtonRenderer: ViewRenderer<Button>() {
+class ButtonRenderer(
+        view: Button,
+        element: HTMLElement,
+        reRendering: Boolean = true
+): AbstractViewRenderer<Button>(view, element, reRendering) {
 
     class ButtonConfig: HasKeys() {
 
@@ -33,11 +37,11 @@ class ButtonRenderer: ViewRenderer<Button>() {
         val type by EnumRWKey(Type.values())
     }
 
-    override val element = document.createElement("button") as HTMLElement
-
     private val buttonConfig = ButtonConfig()
 
-    override fun buildElement(view: Button) {
+    constructor(view: Button): this(view, document.createElement("button") as HTMLElement, false)
+
+    override fun buildElement() {
         val viewExtras = view.webExtras
         if (viewExtras != null) {
             buttonConfig.keys = viewExtras.keys
@@ -59,18 +63,15 @@ class ButtonRenderer: ViewRenderer<Button>() {
             false -> classes -= "mdl-js-ripple-effect"
         }
 
-
         buttonConfig.raise.nonNull {
             if (it) classes += "mdl-button--raised" else classes -= "mdl-button--raised"
         }
 
-        if (buttonConfig.accentColor != null) classes -= "mdl-button--accent"
         when (buttonConfig.accentColor) {
+            null, ButtonConfig.Color.NONE -> classes -= listOf("mdl-button--accent", "mdl-button--primary")
             ButtonConfig.Color.PRIMARY -> classes += "mdl-button--primary"
             ButtonConfig.Color.ACCENT -> classes += "mdl-button--accent"
-            else -> { }
         }
-
 
         buttonConfig.type.nonNull {
             if (it.toString() == ButtonConfig.Type.FAB.toString()) {
@@ -80,5 +81,4 @@ class ButtonRenderer: ViewRenderer<Button>() {
             }
         }
     }
-
 }
