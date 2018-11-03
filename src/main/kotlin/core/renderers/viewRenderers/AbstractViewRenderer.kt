@@ -61,48 +61,36 @@ abstract class AbstractViewRenderer<V: View>(
     }
 
     private fun handleWidth() {
-        val width = when (Dimension.type(view.width)) {
-            Dimension.Type.WRAP_CONTENT -> {
-                element.style.removeProperty("width")
-                null
-            }
-            Dimension.Type.RELATIVE ->  view.width * 100 to ElementCss.DimensionUnit.RELATIVE
-            Dimension.Type.EXPLICIT -> view.width to ElementCss.DimensionUnit.PX
-        }
-        if (width != null) {
-            css.width = width
+        css.width = when (Dimension.type(view.width)) {
+            Dimension.Type.WRAP_CONTENT -> ElementCss.Dimension.MIN_CONTENT
+            Dimension.Type.RELATIVE ->  ElementCss.Dimension(view.width * 100, ElementCss.Dimension.Unit.RELATIVE)
+            Dimension.Type.EXPLICIT -> ElementCss.Dimension(view.width, ElementCss.Dimension.Unit.PX)
         }
     }
 
     private fun handleHeight() {
-        val height = when (Dimension.type(view.height)) {
-            Dimension.Type.WRAP_CONTENT -> {
-                element.style.removeProperty("height")
-                null
-            }
-            Dimension.Type.RELATIVE ->  view.height * 100 to ElementCss.DimensionUnit.RELATIVE
-            Dimension.Type.EXPLICIT -> view.height to ElementCss.DimensionUnit.PX
-        }
-        if (height != null) {
-            css.height = height
+        css.height = when (Dimension.type(view.height)) {
+            Dimension.Type.WRAP_CONTENT -> ElementCss.Dimension.MIN_CONTENT
+            Dimension.Type.RELATIVE ->  ElementCss.Dimension(view.height * 100, ElementCss.Dimension.Unit.RELATIVE)
+            Dimension.Type.EXPLICIT -> ElementCss.Dimension(view.height, ElementCss.Dimension.Unit.PX)
         }
     }
     
     private fun handleMargins() {
         css.apply {
-            view.marginStart.nonNull { marginStart = it to ElementCss . DimensionUnit.PX }
-            view.marginEnd.nonNull { marginEnd = it to ElementCss.DimensionUnit.PX }
-            view.marginTop.nonNull { marginTop = it to ElementCss.DimensionUnit.PX }
-            view.marginBottom.nonNull { marginBottom = it to ElementCss.DimensionUnit.PX }
+            view.marginStart.nonNull { marginStart = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.marginEnd.nonNull { marginEnd = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.marginTop.nonNull { marginTop = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.marginBottom.nonNull { marginBottom = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
         }
     }
 
     private fun handlePadding() {
         css.apply {
-            view.paddingStart.nonNull { paddingStart = it to ElementCss . DimensionUnit.PX }
-            view.paddingEnd.nonNull { paddingEnd = it to ElementCss.DimensionUnit.PX }
-            view.paddingTop.nonNull { paddingTop = it to ElementCss.DimensionUnit.PX }
-            view.paddingBottom.nonNull { paddingBottom = it to ElementCss.DimensionUnit.PX }
+            view.paddingStart.nonNull { paddingStart = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.paddingEnd.nonNull { paddingEnd = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.paddingTop.nonNull { paddingTop = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.paddingBottom.nonNull { paddingBottom = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
         }
     }
     

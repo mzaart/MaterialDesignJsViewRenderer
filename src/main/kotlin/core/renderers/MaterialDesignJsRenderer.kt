@@ -1,6 +1,5 @@
 package core.renderers
 
-import core.renderers.viewRenderers.AbstractViewRenderer
 import core.views.View
 import core.views.layouts.Layout
 import di.inject
@@ -19,6 +18,11 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
         if (contentRoot.length != 1) {
             throw IllegalStateException("None or more than one 'body' tags exist in document")
         }
+
+        ElementCss().apply {
+            width = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_WIDTH)
+            height = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_HEIGHT)
+        }.applyTo(contentRoot[0]!! as HTMLElement)
     }
 
     override fun setRoot(layout: Layout) {
@@ -27,8 +31,8 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
         val layoutElement = layoutRenderer.renderView()
 
         val css = ElementCss().apply {
-            width = 100.0 to ElementCss.DimensionUnit.VIEWPORT_WIDTH
-            height = 100.0 to ElementCss.DimensionUnit.VIEWPORT_HEIGHT
+            width = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_WIDTH)
+            height = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_HEIGHT)
             overflowX = ElementCss.Overflow.HIDDEN
             overflowY = ElementCss.Overflow.SCROLL
         }
@@ -46,7 +50,6 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
     override fun invalidate(view: View) {
         if (isViewAttached(view)) {
             val renderedElement = document.getElementById(view.id.toString())!! as HTMLElement
-            println(renderedElement)
             val renderer by inject<ViewRenderer<*>, View, HTMLElement>(view.name, view, renderedElement)
             renderer.renderView()
         }

@@ -1,0 +1,69 @@
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.71"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.37"
+    }
+}
+
+apply plugin: 'kotlin2js'
+apply plugin: 'org.jetbrains.kotlin.frontend'
+
+compileKotlin2Js {
+    kotlinOptions {
+        metaInfo = true
+        kotlinOptions.outputFile = "${projectDir}/web/js/app.js"
+        sourceMap = true
+        moduleKind = "umd"
+    }
+
+    doLast {
+        copy {
+            from "build/node_modules_imported"
+            into "web/js/lib"
+        }
+    }
+}
+
+
+
+kotlinFrontend {
+    downloadNodeJsVersion = 'latest'
+
+    npm {
+        dependency "material-design-lite"
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs += "src/main/kotlin"
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:1.2.60"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js"
+
+    compile(name: 'View-js', ext:'jar')
+
+    compile 'org.kodein.di:kodein-di-erased-js:5.2.0'
+    compile 'org.kodein.di:kodein-di-conf-js:5.2.0'
+}
+
+clean.doFirst {
+    delete 'web/js/app', 'web/js/app.js', 'web/js/app.meta.js', 'web/js/lib'
+}

@@ -3,10 +3,12 @@ package di
 import core.renderers.*
 import core.renderers.viewRenderers.inputs.ButtonRenderer
 import core.renderers.viewRenderers.layouts.LinearLayoutRenderer
+import core.renderers.viewRenderers.layouts.RelativeLayoutRenderer
 import core.views.Theme
 import core.views.View
 import core.views.input.Button
 import core.views.layouts.LinearLayout
+import core.views.layouts.RelativeLayout
 import org.kodein.di.Kodein
 import org.kodein.di.erased.bind
 import org.kodein.di.erased.factory
@@ -22,10 +24,13 @@ object Container {
 
         bind<ViewTreeRenderer>() with singleton { MaterialDesignJsRenderer }
 
-        bind<ViewRenderer<*>>("Button") with factory { v: View -> ButtonRenderer(v as Button) }
         bind<ViewRenderer<*>>("LinearLayout") with factory { v: View -> LinearLayoutRenderer(v as LinearLayout) }
-
-        bind<ViewRenderer<*>>("Button") with factory { v: View, e: HTMLElement -> ButtonRenderer(v as Button, e) }
         bind<ViewRenderer<*>>("LinearLayout") with factory { v: View, e: HTMLElement-> LinearLayoutRenderer(v as LinearLayout, e) }
+
+        bind<ViewRenderer<*>>("RelativeLayout") with factory { v: View -> RelativeLayoutRenderer(v as RelativeLayout) }
+        bind<ViewRenderer<*>>("RelativeLayout") with factory { v: View, e: HTMLElement-> RelativeLayoutRenderer(v as RelativeLayout, e) }
+
+        bind<ViewRenderer<*>>("Button") with factory { v: View -> ButtonRenderer(v as Button) }
+        bind<ViewRenderer<*>>("Button") with factory { v: View, e: HTMLElement -> ButtonRenderer(v as Button, e) }
     }
 }
