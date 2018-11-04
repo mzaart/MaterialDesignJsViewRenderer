@@ -6,6 +6,8 @@ import core.views.View
 import core.views.layouts.Layout
 import di.inject
 import org.w3c.dom.HTMLElement
+import utils.elementCss.properties.Overflow
+import utils.elementCss.properties.WhiteSpace
 import utils.extensions.children
 import utils.extensions.findChild
 import kotlin.browser.document
@@ -19,6 +21,7 @@ abstract class LayoutRenderer<L: Layout>(
     constructor(view: L): this(view, document.createElement("div") as HTMLElement, false)
 
     override fun buildElement() {
+        applyScroll()
         renderChildren()
         removeChildren()
     }
@@ -41,7 +44,6 @@ abstract class LayoutRenderer<L: Layout>(
 
     protected open fun removeChildren() {
         getViewsToBeRemoved().forEach { id ->
-            println(id)
             val child = view.find(id)
             val element = element.findChild(id)
             beforeChildIsRemoved(child, element)
@@ -60,5 +62,11 @@ abstract class LayoutRenderer<L: Layout>(
         val renderedIds = element.children().map { c -> c.id.toInt() }
         val childIds = view.children().map { c -> c.id }
         return renderedIds - childIds
+    }
+
+    private fun applyScroll() {
+        css.whiteSpace = WhiteSpace.NOWRAP
+        css.overflowX.value = if (view.scrollX) Overflow.Value.AUTO else Overflow.Value.HIDDEN
+        css.overflowY.value = if (view.scrollY) Overflow.Value.AUTO else Overflow.Value.HIDDEN
     }
 }

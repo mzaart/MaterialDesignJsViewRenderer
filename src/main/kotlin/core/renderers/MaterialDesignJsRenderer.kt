@@ -5,7 +5,10 @@ import core.views.layouts.Layout
 import di.inject
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.get
-import utils.ElementCss
+import utils.elementCss.ElementCss
+import utils.elementCss.properties.CssUnit
+import utils.elementCss.properties.Overflow
+import utils.elementCss.properties.WhiteSpace
 import kotlin.browser.document
 
 object MaterialDesignJsRenderer: ViewTreeRenderer {
@@ -20,8 +23,8 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
         }
 
         ElementCss().apply {
-            width = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_WIDTH)
-            height = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_HEIGHT)
+            width.set(100.0 to CssUnit.VIEWPORT_WIDTH)
+            height.set(100.0 to CssUnit.VIEWPORT_HEIGHT)
         }.applyTo(contentRoot[0]!! as HTMLElement)
     }
 
@@ -31,15 +34,15 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
         val layoutElement = layoutRenderer.renderView()
 
         val css = ElementCss().apply {
-            width = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_WIDTH)
-            height = ElementCss.Dimension(100.0, ElementCss.Dimension.Unit.VIEWPORT_HEIGHT)
-            overflowX = ElementCss.Overflow.HIDDEN
-            overflowY = ElementCss.Overflow.SCROLL
+            width.set(100.0 to CssUnit.VIEWPORT_WIDTH)
+            height.set(100.0 to CssUnit.VIEWPORT_HEIGHT)
+            overflowX.value = Overflow.Value.HIDDEN
+            overflowY.value = Overflow.Value.AUTO
         }
 
         val config by inject<RendererConfig>()
         if (config.rootLayoutHorizontalNoWrap) {
-            css.whiteSpace = ElementCss.WhiteSpace.NO_WRAP
+            css.whiteSpace = WhiteSpace.NOWRAP
         }
 
         css.applyTo(layoutElement)

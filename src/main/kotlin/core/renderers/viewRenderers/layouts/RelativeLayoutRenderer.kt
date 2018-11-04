@@ -4,12 +4,12 @@ import core.loaders.viewTree.IllegalViewTreeException
 import core.views.View
 import core.views.layouts.RelativeLayout
 import org.w3c.dom.HTMLElement
-import utils.ElementCss
+import utils.elementCss.ElementCss
 import utils.algos.graph.Graph
+import utils.elementCss.properties.CssDimen
+import utils.elementCss.properties.CssUnit
+import utils.elementCss.properties.Position
 import kotlin.browser.document
-
-typealias Dimension = ElementCss.Dimension
-typealias Unit = ElementCss.Dimension.Unit
 
 class RelativeLayoutRenderer(
         view: RelativeLayout,
@@ -20,7 +20,7 @@ class RelativeLayoutRenderer(
     constructor(view: RelativeLayout): this(view, document.createElement("div") as HTMLElement, false)
 
     override fun buildElement() {
-        css.position = ElementCss.Position.RELATIVE
+        css.position = Position.RELATIVE
         super.buildElement()
     }
 
@@ -28,7 +28,7 @@ class RelativeLayoutRenderer(
         val index = view.children().indexOf(child)
         val childCss = ElementCss()
         for (positioning in view.positions[index]) {
-            childCss.position = ElementCss.Position.ABSOLUTE
+            childCss.position = Position.ABSOLUTE
             when (positioning.first) {
                 RelativeLayout.Positioning.ALIGN_PARENT_TOP -> alignToParentTop(childCss)
                 RelativeLayout.Positioning.ALIGN_PARENT_BOTTOM -> alignToParentBottom(childCss)
@@ -64,38 +64,38 @@ class RelativeLayoutRenderer(
     }
 
     private fun alignToParentTop(childCss: ElementCss) {
-        childCss.top = Dimension.ZERO
+        childCss.top.set(CssDimen.ZERO)
     }
 
     private fun alignToParentBottom(childCss: ElementCss) {
-        childCss.bottom = Dimension.ZERO
+        childCss.bottom.set(CssDimen.ZERO)
     }
 
     private fun alignToParentStart(childCss: ElementCss) {
-        childCss.start = Dimension.ZERO
+        childCss.start.set(CssDimen.ZERO)
     }
 
     private fun alignToParentEnd(childCss: ElementCss) {
-        childCss.end = Dimension.ZERO
+        childCss.end.set(CssDimen.ZERO)
     }
 
     private fun centerHorizontal(childCss: ElementCss) {
         childCss.apply {
-            start = Dimension(50.0, Unit.RELATIVE)
-            transformation.translateX(Dimension(-50.0, Unit.RELATIVE))
+            start.set(50.0 to CssUnit.RELATIVE)
+            transformation.translateX(-50.0 to CssUnit.RELATIVE)
 
-            marginStart = Dimension.ZERO
-            marginEnd = Dimension.ZERO
+            marginStart.set(CssDimen.ZERO)
+            marginEnd.set(CssDimen.ZERO)
         }
     }
 
     private fun centerVertical(childCss: ElementCss) {
         childCss.apply {
-            top = Dimension(50.0, Unit.RELATIVE)
-            transformation.translateY(Dimension(-50.0, Unit.RELATIVE))
+            top.set(50.0 to CssUnit.RELATIVE)
+            transformation.translateY(-50.0 to CssUnit.RELATIVE)
 
-            marginTop = Dimension.ZERO
-            marginBottom = Dimension.ZERO
+            marginTop.set(CssDimen.ZERO)
+            marginBottom.set(CssDimen.ZERO)
         }
     }
 }

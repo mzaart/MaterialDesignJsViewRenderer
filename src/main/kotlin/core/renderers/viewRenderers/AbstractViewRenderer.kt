@@ -6,10 +6,13 @@ import core.views.Theme
 import core.views.View
 import di.inject
 import org.w3c.dom.HTMLElement
-import utils.ElementCss
+import utils.elementCss.ElementCss
+import utils.elementCss.properties.CssDimen
+import utils.elementCss.properties.CssUnit
+import utils.elementCss.properties.Display
+import utils.elementCss.properties.Visibility
 import utils.extensions.nonNull
 import kotlin.browser.document
-
 
 abstract class AbstractViewRenderer<V: View>(
         protected val view: V,
@@ -29,6 +32,10 @@ abstract class AbstractViewRenderer<V: View>(
     protected abstract fun buildElement()
 
     private fun applyCommonViewAttrs() {
+        // mark element as View
+        val viewNode = document.createAttribute("view")
+        element.setAttributeNode(viewNode)
+
         // set id
         element.id = view.id.toString()
 
@@ -49,48 +56,50 @@ abstract class AbstractViewRenderer<V: View>(
 
     private fun handleVisibility() {
         if (view.visibility == View.Visibility.GONE) {
-            css.display = ElementCss.Display.None
+            css.display = Display.None
         } else {
             element.style.removeProperty("display")
             css.visibility = when (view.visibility) {
-                View.Visibility.VISIBLE -> ElementCss.Visibility.VISIBLE
-                View.Visibility.INVISIBLE -> ElementCss.Visibility.HIDDEN
+                View.Visibility.VISIBLE -> Visibility.VISIBLE
+                View.Visibility.INVISIBLE -> Visibility.HIDDEN
                 else -> throw IllegalStateException()
             }
         }
     }
 
     private fun handleWidth() {
-        css.width = when (Dimension.type(view.width)) {
-            Dimension.Type.WRAP_CONTENT -> ElementCss.Dimension.MIN_CONTENT
-            Dimension.Type.RELATIVE ->  ElementCss.Dimension(view.width * 100, ElementCss.Dimension.Unit.RELATIVE)
-            Dimension.Type.EXPLICIT -> ElementCss.Dimension(view.width, ElementCss.Dimension.Unit.PX)
+        val width = when (Dimension.type(view.width)) {
+            Dimension.Type.WRAP_CONTENT -> null
+            Dimension.Type.RELATIVE ->  view.width * 100 to CssUnit.RELATIVE
+            Dimension.Type.EXPLICIT -> view.width to CssUnit.PX
         }
+        width.nonNull { css.width.set(it) }
     }
 
     private fun handleHeight() {
-        css.height = when (Dimension.type(view.height)) {
-            Dimension.Type.WRAP_CONTENT -> ElementCss.Dimension.MIN_CONTENT
-            Dimension.Type.RELATIVE ->  ElementCss.Dimension(view.height * 100, ElementCss.Dimension.Unit.RELATIVE)
-            Dimension.Type.EXPLICIT -> ElementCss.Dimension(view.height, ElementCss.Dimension.Unit.PX)
+        val height = when (Dimension.type(view.height)) {
+            Dimension.Type.WRAP_CONTENT -> null
+            Dimension.Type.RELATIVE ->  view.height * 100 to CssUnit.RELATIVE
+            Dimension.Type.EXPLICIT -> view.height to CssUnit.PX
         }
+        height.nonNull { css.height.set(it) }
     }
     
     private fun handleMargins() {
         css.apply {
-            view.marginStart.nonNull { marginStart = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.marginEnd.nonNull { marginEnd = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.marginTop.nonNull { marginTop = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.marginBottom.nonNull { marginBottom = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.marginStart.nonNull { marginStart.set(it to CssUnit.PX) }
+            view.marginEnd.nonNull { marginEnd.set(it to CssUnit.PX) }
+            view.marginTop.nonNull { marginTop.set(it to CssUnit.PX) }
+            view.marginBottom.nonNull { marginBottom.set(it to CssUnit.PX) }
         }
     }
 
     private fun handlePadding() {
         css.apply {
-            view.paddingStart.nonNull { paddingStart = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.paddingEnd.nonNull { paddingEnd = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.paddingTop.nonNull { paddingTop = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
-            view.paddingBottom.nonNull { paddingBottom = ElementCss.Dimension(it, ElementCss.Dimension.Unit.PX) }
+            view.paddingStart.nonNull { paddingStart.set(it to CssUnit.PX) }
+            view.paddingEnd.nonNull { paddingEnd.set(it to CssUnit.PX) }
+            view.paddingTop.nonNull { paddingTop.set(it to CssUnit.PX) }
+            view.paddingBottom.nonNull { paddingBottom.set(it to CssUnit.PX) }
         }
     }
     
