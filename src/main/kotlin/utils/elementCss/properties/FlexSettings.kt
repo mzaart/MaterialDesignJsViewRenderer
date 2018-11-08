@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
 open class FlexSettings: CssProperty {
@@ -16,7 +16,7 @@ open class FlexSettings: CssProperty {
 
     open var direction: Direction? = null
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        direction.nonNull { style.flexDirection = it.cssString() }
+    override fun applyToStyle(element: HTMLElement) {
+        direction.nonNull { element.style.flexDirection = it.cssString() }
     }
 }

@@ -1,8 +1,8 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 interface CssProperty {
 
-    fun applyToStyle(style: CSSStyleDeclaration)
+    fun applyToStyle(element: HTMLElement)
 }

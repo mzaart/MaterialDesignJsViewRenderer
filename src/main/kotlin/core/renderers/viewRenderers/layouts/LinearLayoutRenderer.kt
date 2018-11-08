@@ -38,9 +38,10 @@ class LinearLayoutRenderer(
         super.buildElement()
     }
 
-    override fun afterChildRenders(child: View, childElement: HTMLElement) {
+    override fun childCreated(child: View, childElement: HTMLElement): Boolean {
         if (view.direction == LinearLayout.Direction.VERTICAL) {
             element.appendChild(document.createElement("br"))
         }
+        return true
     }
 }

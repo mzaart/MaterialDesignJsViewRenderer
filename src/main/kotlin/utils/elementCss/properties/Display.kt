@@ -1,15 +1,17 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 enum class Display: CssProperty, CssValue {
     None,
     BLOCK,
     INLINE,
     INLINE_BLOCK,
-    FLEX;
+    FLEX,
+    GRID,
+    INLINE_GRID;
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        style.display = cssString()
+    override fun applyToStyle(element: HTMLElement) {
+        element.style.display = cssString()
     }
 }

@@ -1,5 +1,6 @@
 package utils.elementCss.properties
 
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.css.CSSStyleDeclaration
 
 enum class WhiteSpace: CssValue, CssProperty {
@@ -11,7 +12,7 @@ enum class WhiteSpace: CssValue, CssProperty {
     INITIAL,
     INHERIT;
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        style.whiteSpace = cssString()
+    override fun applyToStyle(element: HTMLElement) {
+        element.style.whiteSpace = cssString()
     }
 }

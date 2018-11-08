@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 typealias CssDimen = Dimension
 typealias CssUnit = Dimension.Unit
@@ -59,13 +59,16 @@ open class Dimension(
         this.unit = pair.second
     }
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
+    override fun cssString(): String {
+        return when (unit) {
+            in listOf(Unit.AUTO, Unit.MAX_CONTENT, Unit.MIN_CONTENT) -> unit!!.cssString()
+            else -> value!!.toString() + unit!!.cssString()
+        }
+    }
+
+    override fun applyToStyle(element: HTMLElement) {
         if (isSet) {
-            val propValue = when (unit) {
-                in listOf(Unit.AUTO, Unit.MAX_CONTENT, Unit.MIN_CONTENT) -> unit!!.cssString()
-                else -> value!!.toString() + unit!!.cssString()
-            }
-            style.setProperty(propertyName, propValue)
+            element.style.setProperty(propertyName, cssString())
         }
     }
 }

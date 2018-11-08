@@ -1,22 +1,20 @@
 package utils.extensions
 
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.get
+import org.w3c.dom.*
 import utils.elementCss.ElementCss
 
-fun HTMLElement.addClasses(classes: Set<String>) {
+fun <E: HTMLElement> E.addClasses(classes: Set<String>) {
     this.className += " " + classes.joinToString(separator = " ")
 }
 
-fun HTMLElement.findChild(id: Int) = filterChildrenBy { c -> c.id.toInt() == id }.first()
+fun <E: HTMLElement> E.filterChildrenBy(condition: (HTMLElement) -> Boolean): List<HTMLElement> = viewChildren().filter(condition)
 
-fun HTMLElement.filterChildrenBy(condition: (HTMLElement) -> Boolean): List<HTMLElement> = children().filter(condition)
+fun <E: HTMLElement> E.viewChildren(): List<HTMLElement> = children().filter { e -> e.hasAttribute("view") }
 
-fun HTMLElement.children(): List<HTMLElement> = (0 until childElementCount)
+fun <E: HTMLElement> E.children(): List<HTMLElement> = (0 until childElementCount)
         .map { i -> childNodes[i] as HTMLElement }
-        .filter { e -> e.hasAttribute("view") }
 
-fun HTMLElement.applyCss(init: ElementCss.() -> Unit) {
+fun <E: HTMLElement> E.applyCss(init: ElementCss.() -> Unit) {
     val css = ElementCss()
     css.init()
     css.applyTo(this)

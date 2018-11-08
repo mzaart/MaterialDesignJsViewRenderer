@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
 open class FlexItemSettings: CssProperty {
@@ -19,10 +19,10 @@ open class FlexItemSettings: CssProperty {
     open var grow: Number? = null
     open var flexBasis: Number? = null
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        alignSelf.nonNull { style.alignSelf = it.cssString() }
-        shrink.nonNull { style.flexShrink = it.cssString() }
-        grow.nonNull { style.flexGrow = it.cssString() }
-        flexBasis.nonNull { style.flexBasis = it.cssString() }
+    override fun applyToStyle(element: HTMLElement) {
+        alignSelf.nonNull { element.style.alignSelf = it.cssString() }
+        shrink.nonNull { element.style.flexShrink = it.cssString() }
+        grow.nonNull { element.style.flexGrow = it.cssString() }
+        flexBasis.nonNull { element.style.flexBasis = it.cssString() }
     }
 }

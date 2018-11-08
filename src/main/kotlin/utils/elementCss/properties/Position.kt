@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 enum class Position: CssValue, CssProperty {
     STATIC,
@@ -9,7 +9,7 @@ enum class Position: CssValue, CssProperty {
     ABSOLUTE,
     STICKY;
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        style.position = cssString()
+    override fun applyToStyle(element: HTMLElement) {
+        element.style.position = cssString()
     }
 }

@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 class Overflow(var axis: OverflowAxis, var value: Value?): CssProperty {
 
@@ -20,12 +20,12 @@ class Overflow(var axis: OverflowAxis, var value: Value?): CssProperty {
 
     constructor(axis: OverflowAxis): this(axis, null)
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
+    override fun applyToStyle(element: HTMLElement) {
         if (value != null) {
             if (axis == OverflowAxis.X) {
-                style.overflowX = value!!.cssString()
+                element.style.overflowX = value!!.cssString()
             } else {
-                style.overflowY = value!!.cssString()
+                element.style.overflowY = value!!.cssString()
             }
         }
     }

@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
 open class Transformation: CssProperty {
@@ -20,8 +20,10 @@ open class Transformation: CssProperty {
         translate[1] = y
     }
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        toCss().nonNull { style.transform = it }
+    override fun applyToStyle(element: HTMLElement) {
+        toCss().nonNull {
+            element.style.transform = it
+        }
     }
 
     open fun toCss(): String? {

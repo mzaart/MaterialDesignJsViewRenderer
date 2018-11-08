@@ -1,6 +1,6 @@
 package utils.elementCss.properties
 
-import org.w3c.dom.css.CSSStyleDeclaration
+import org.w3c.dom.HTMLElement
 
 enum class Visibility: CssValue, CssProperty {
     VISIBLE,
@@ -9,7 +9,7 @@ enum class Visibility: CssValue, CssProperty {
     INITIAL,
     INHERIT;
 
-    override fun applyToStyle(style: CSSStyleDeclaration) {
-        style.visibility = cssString()
+    override fun applyToStyle(element: HTMLElement) {
+        element.style.visibility = cssString()
     }
 }

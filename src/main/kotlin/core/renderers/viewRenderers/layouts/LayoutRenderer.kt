@@ -8,8 +8,7 @@ import di.inject
 import org.w3c.dom.HTMLElement
 import utils.elementCss.properties.Overflow
 import utils.elementCss.properties.WhiteSpace
-import utils.extensions.children
-import utils.extensions.findChild
+import utils.extensions.viewChildren
 import kotlin.browser.document
 
 abstract class LayoutRenderer<L: Layout>(
@@ -26,43 +25,46 @@ abstract class LayoutRenderer<L: Layout>(
         removeChildren()
     }
 
-    protected open fun beforeChildRenders(child: View) {}
-    protected open fun afterChildRenders(child: View, childElement: HTMLElement) {}
+    protected open fun childCreated(child: View, childElement: HTMLElement): Boolean = true
 
-    protected open fun beforeChildIsRemoved(child: View, childElement: HTMLElement) {}
-    protected open fun afterChildIsRemoved(child: View, childElement: HTMLElement) {}
+    protected open fun beforeChildIsRemoved(childElement: HTMLElement): Boolean = true
 
     protected open fun renderChildren() {
         getViewsToBeRendered().map { id -> view.find(id) }.forEach { c: View ->
             val childRenderer by inject<ViewRenderer<View>, View>(c.name, c)
-            beforeChildRenders(c)
             val child = childRenderer.renderView()
-            element.appendChild(child)
-            afterChildRenders(c, child)
+            val shouldAdd = childCreated(c, child)
+            if (shouldAdd) {
+                element.appendChild(child)
+            }
         }
     }
 
     protected open fun removeChildren() {
         getViewsToBeRemoved().forEach { id ->
-            val child = view.find(id)
-            val element = element.findChild(id)
-            beforeChildIsRemoved(child, element)
-            element.removeChild(element)
-            afterChildIsRemoved(child, element)
+            val element = getChildElements().first { it.id.toInt() == id }
+            val shouldRemove = beforeChildIsRemoved(element)
+            if (shouldRemove) {
+                element.removeChild(element)
+            }
         }
     }
 
     protected open fun getViewsToBeRendered(): List<Int> {
-        val renderedIds = element.children().map { c -> c.id.toInt() }
+        val renderedIds = getChildElements().map { c -> c.id.toInt() }
         val childIds = view.children().map { c -> c.id }
+        println("To be rendered: ${childIds - renderedIds}")
         return childIds - renderedIds
     }
 
     protected open fun getViewsToBeRemoved(): List<Int> {
-        val renderedIds = element.children().map { c -> c.id.toInt() }
+        val renderedIds = getChildElements().map { c -> c.id.toInt() }
         val childIds = view.children().map { c -> c.id }
+        println("To be removed: ${renderedIds - childIds}")
         return renderedIds - childIds
     }
+
+    protected open fun getChildElements(): List<HTMLElement> = element.viewChildren()
 
     private fun applyScroll() {
         css.whiteSpace = WhiteSpace.NOWRAP

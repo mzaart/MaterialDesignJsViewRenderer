@@ -40,6 +40,9 @@ open class ElementCss {
 
     val transformation: Transformation by css
 
+    val grid: Grid by css
+    val gridItem: GridItem by css
+
     init {
         css["width"] = Dimension("width")
         css["height"] = Dimension("height")
@@ -66,6 +69,9 @@ open class ElementCss {
         css["flexItemSettings"] = FlexItemSettings()
         
         css["transformation"] = Transformation()
+
+        css["grid"] = Grid()
+        css["gridItem"] = GridItem()
     }
 
     fun extend(style: ElementCss, override: Boolean = false) {
@@ -81,7 +87,7 @@ open class ElementCss {
             if (cssProp !is CssProperty) {
                 throw IllegalStateException("Field is not an instance of CssProperty")
             }
-            cssProp.applyToStyle(element.style)
+            cssProp.applyToStyle(element)
         }
     }
 }
