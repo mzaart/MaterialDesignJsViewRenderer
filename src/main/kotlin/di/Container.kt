@@ -1,12 +1,16 @@
 package di
 
 import core.renderers.*
+import core.renderers.viewRenderers.display.ImageViewRenderer
+import core.renderers.viewRenderers.display.TextViewRenderer
 import core.renderers.viewRenderers.inputs.ButtonRenderer
 import core.renderers.viewRenderers.layouts.GridLayoutRenderer
 import core.renderers.viewRenderers.layouts.LinearLayoutRenderer
 import core.renderers.viewRenderers.layouts.RelativeLayoutRenderer
 import core.views.Theme
 import core.views.View
+import core.views.display.ImageView
+import core.views.display.TextView
 import core.views.input.Button
 import core.views.layouts.GridLayout
 import core.views.layouts.LinearLayout
@@ -37,5 +41,11 @@ object Container {
 
         bind<ViewRenderer<*>>("Button") with factory { v: View -> ButtonRenderer(v as Button) }
         bind<ViewRenderer<*>>("Button") with factory { v: View, e: HTMLElement -> ButtonRenderer(v as Button, e) }
+
+        bind<ViewRenderer<*>>("ImageView") with factory { v: View -> ImageViewRenderer(v as ImageView) }
+        bind<ViewRenderer<*>>("ImageView") with factory { v: View, e: HTMLElement -> ImageViewRenderer(v as ImageView, e)}
+
+        bind<ViewRenderer<*>>("TextView") with factory { v: View -> TextViewRenderer(v as TextView) }
+        bind<ViewRenderer<*>>("TextView") with factory { v: View, e: HTMLElement -> TextViewRenderer(v as TextView, e) }
     }
 }

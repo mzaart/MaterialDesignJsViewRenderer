@@ -53,14 +53,12 @@ abstract class LayoutRenderer<L: Layout>(
     protected open fun getViewsToBeRendered(): List<Int> {
         val renderedIds = getChildElements().map { c -> c.id.toInt() }
         val childIds = view.children().map { c -> c.id }
-        println("To be rendered: ${childIds - renderedIds}")
         return childIds - renderedIds
     }
 
     protected open fun getViewsToBeRemoved(): List<Int> {
         val renderedIds = getChildElements().map { c -> c.id.toInt() }
         val childIds = view.children().map { c -> c.id }
-        println("To be removed: ${renderedIds - childIds}")
         return renderedIds - childIds
     }
 

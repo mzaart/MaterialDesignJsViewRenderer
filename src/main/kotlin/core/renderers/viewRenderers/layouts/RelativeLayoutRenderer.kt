@@ -46,7 +46,6 @@ class RelativeLayoutRenderer(
 
     override fun getViewsToBeRendered(): List<Int> {
         val ids = super.getViewsToBeRendered()
-        val childIds = view.children().map { it.id }
 
         val edges: MutableList<Pair<Int, Int>> = mutableListOf()
         for (i in 0 until view.children().size) {

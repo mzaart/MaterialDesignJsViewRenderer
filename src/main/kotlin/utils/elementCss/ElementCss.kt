@@ -43,6 +43,9 @@ open class ElementCss {
     val grid: Grid by css
     val gridItem: GridItem by css
 
+    val text: Text by css
+    val font: Font by css
+
     init {
         css["width"] = Dimension("width")
         css["height"] = Dimension("height")
@@ -72,6 +75,9 @@ open class ElementCss {
 
         css["grid"] = Grid()
         css["gridItem"] = GridItem()
+
+        css["font"] = Font()
+        css["text"] = Text()
     }
 
     fun extend(style: ElementCss, override: Boolean = false) {
