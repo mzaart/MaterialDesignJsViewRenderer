@@ -6,20 +6,38 @@ import core.views.View
 import core.views.layouts.Layout
 import di.inject
 import org.w3c.dom.HTMLElement
+import utils.elementCss.properties.Display
 import utils.elementCss.properties.Overflow
 import utils.elementCss.properties.WhiteSpace
 import utils.extensions.viewChildren
 import kotlin.browser.document
 
+/**
+ * This is the base class for renderers that render layout views.
+ *
+ * The procedure for rendering layout views goes as follows:
+ *  1. The [AbstractViewRenderer] applies common view attributes.
+ *  2. This class applies scrolling to the element
+ *  3. Renders any newly added children or all children if the view is being rendered for the first time.
+ *  4. Removes any child UI components that were removed from the layout view
+ *
+ *  Listener functions for child view rendering/removal so that subclassing layout renderers can apply layout specific
+ *  positioning logic.
+ *
+ */
 abstract class LayoutRenderer<L: Layout>(
         view: L,
         element: HTMLElement,
         reRendering: Boolean = true
 ): AbstractViewRenderer<L>(view, element, reRendering) {
 
+    /**
+     * This constructor is used when rendering the view for the first time.
+     */
     constructor(view: L): this(view, document.createElement("div") as HTMLElement, false)
 
     override fun buildElement() {
+        css.display = Display.INLINE_BLOCK
         applyScroll()
         renderChildren()
         removeChildren()

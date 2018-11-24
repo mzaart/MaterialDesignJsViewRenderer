@@ -46,7 +46,6 @@ class GridLayoutRenderer(
             gridItem.columnSpan = cell.columnSpan
         }
         cellDiv.setAttribute("index", "(${cell.row},${cell.column})")
-        cellDiv.addClass("test")
 
         // edit child element
         val childCss = ElementCss().apply { position = Position.ABSOLUTE }

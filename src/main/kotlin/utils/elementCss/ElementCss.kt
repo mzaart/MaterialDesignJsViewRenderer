@@ -3,6 +3,9 @@ package utils.elementCss
 import org.w3c.dom.HTMLElement
 import utils.elementCss.properties.*
 
+/**
+ * Represents an element's inline CSS.
+ */
 open class ElementCss {
 
     private val css: MutableMap<String, Any?> = mutableMapOf()
@@ -80,6 +83,12 @@ open class ElementCss {
         css["text"] = Text()
     }
 
+    /**
+     * Inherits the style of another element.
+     *
+     * @param style The style to extend.
+     * @param override If true, current values would be overidden by the extended style.
+     */
     fun extend(style: ElementCss, override: Boolean = false) {
         css += if (override) {
             style.css
@@ -88,6 +97,11 @@ open class ElementCss {
         }
     }
 
+    /**
+     * Applies this style to an element's inline style.
+     *
+     * @param element The element to apply the style to.
+     */
     open fun applyTo(element: HTMLElement) {
         css.values.forEach { cssProp ->
             if (cssProp !is CssProperty) {

@@ -1,5 +1,11 @@
 package utils.algos.graph
 
+/**
+ * Used for topological sorting and detection of circular dependencies.
+ *
+ * One usage of this class is for detecting circular dependencies between positioning rule of RelativeLayout children
+ * and figuring which child to render first.
+ */
 class Graph<T: Any> {
 
     companion object {

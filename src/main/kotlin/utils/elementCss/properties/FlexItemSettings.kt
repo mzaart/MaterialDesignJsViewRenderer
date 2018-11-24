@@ -3,6 +3,9 @@ package utils.elementCss.properties
 import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
+/**
+ * Sets CSS properties of child elements of a FlexBox.
+ */
 open class FlexItemSettings: CssProperty {
 
     enum class AlignSelf: CssValue {

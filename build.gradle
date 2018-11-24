@@ -6,15 +6,39 @@ buildscript {
         maven {
             url "https://dl.bintray.com/kotlin/kotlin-eap"
         }
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.71"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.37"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 
 apply plugin: 'kotlin2js'
 apply plugin: 'org.jetbrains.kotlin.frontend'
+apply plugin: 'org.jetbrains.dokka'
+
+dokka {
+    includes = [
+            'src/main/kotlin/core/renderers/dok.md',
+            'src/main/kotlin/core/renderers/viewRenderers/dok.md',
+            'src/main/kotlin/di/dok.md',
+            'src/main/kotlin/utils/elementCss/dok.md'
+    ]
+    outputFormat = 'markdown'
+    impliedPlatforms = ["JS"] // This will force platform tags for all non-common sources e.g. "JVM"
+    kotlinTasks {
+        // dokka fails to retrieve sources from MPP-tasks so they must be set empty to avoid exception
+        // use sourceRoot instead (see below)
+        []
+    }
+    sourceRoot {
+        // assuming there is only a single source dir...
+        path = sourceSets.getByName("main").kotlin.srcDirs[0]
+        platforms = ["JS"]
+    }
+}
 
 compileKotlin2Js {
     kotlinOptions {

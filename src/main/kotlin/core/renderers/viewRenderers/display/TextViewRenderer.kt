@@ -5,6 +5,7 @@ import core.views.Dimension
 import core.views.display.TextView
 import org.w3c.dom.HTMLElement
 import utils.elementCss.properties.CssUnit
+import utils.elementCss.properties.Display
 import utils.elementCss.properties.Font
 import utils.elementCss.properties.Text
 import utils.extensions.applyCss
@@ -26,6 +27,7 @@ class TextViewRenderer(
         }
 
         element.applyCss {
+            display = Display.INLINE_BLOCK
             view.align.nonNull {
                 text.align = when (it) {
                     TextView.Align.LEFT -> Text.Align.LEFT

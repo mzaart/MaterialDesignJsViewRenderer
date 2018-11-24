@@ -40,7 +40,7 @@ class LinearLayoutRenderer(
 
     override fun childCreated(child: View, childElement: HTMLElement): Boolean {
         if (view.direction == LinearLayout.Direction.VERTICAL) {
-            element.appendChild(document.createElement("br"))
+            childElement.applyCss { display = Display.BLOCK }
         }
         return true
     }

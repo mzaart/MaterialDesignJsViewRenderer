@@ -3,6 +3,9 @@ package utils.elementCss.properties
 import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
+/**
+ * Sets CSS properties related to a CSS grid.
+ */
 class Grid: CssProperty {
 
     var rowGap: CssDimen = Dimension("grid-row-gap")

@@ -3,6 +3,9 @@ package utils.elementCss.properties
 import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
+/**
+ * Sets the css properties related to the CSS Grid.
+ */
 class GridItem: CssProperty {
 
     var row: Int? = null

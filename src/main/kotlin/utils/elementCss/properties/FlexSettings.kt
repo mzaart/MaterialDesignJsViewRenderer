@@ -3,6 +3,9 @@ package utils.elementCss.properties
 import org.w3c.dom.HTMLElement
 import utils.extensions.nonNull
 
+/**
+ * Sets CSS properties related to a FlexBox container.
+ */
 open class FlexSettings: CssProperty {
     enum class Direction: CssValue {
 

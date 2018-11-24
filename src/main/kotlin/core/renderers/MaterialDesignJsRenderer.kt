@@ -11,6 +11,9 @@ import utils.elementCss.properties.Overflow
 import utils.elementCss.properties.WhiteSpace
 import kotlin.browser.document
 
+/**
+ * Maps view trees to DOM trees that comply with Material Design standards.
+ */
 object MaterialDesignJsRenderer: ViewTreeRenderer {
 
     private val contentRoot = document.getElementsByTagName("body")
@@ -57,6 +60,11 @@ object MaterialDesignJsRenderer: ViewTreeRenderer {
             renderer.renderView()
         }
     }
+
+    /**
+     * Returns the DOM node corresponding to the view.
+     */
+    fun <V: View> V.physicalView(): HTMLElement = document.getElementById(id.toString()) as HTMLElement
 
     private fun isViewAttached(view: View): Boolean {
         if (!isInitialized) {

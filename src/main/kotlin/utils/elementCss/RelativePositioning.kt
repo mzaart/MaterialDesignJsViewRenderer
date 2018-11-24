@@ -3,6 +3,9 @@ package utils.elementCss
 import utils.elementCss.properties.CssDimen
 import utils.elementCss.properties.CssUnit
 
+/**
+ * Contains utility methods for positioning DOM elements in relation to each other.
+ */
 object RelativePositioning {
 
     fun alignToParentTop(childCss: ElementCss) {

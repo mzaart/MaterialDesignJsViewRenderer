@@ -5,6 +5,9 @@ import org.w3c.dom.HTMLElement
 typealias CssDimen = Dimension
 typealias CssUnit = Dimension.Unit
 
+/**
+ * Represents a CSS dimension property such as width and height.
+ */
 open class Dimension(
         var value: Double?,
         var unit: Unit?,

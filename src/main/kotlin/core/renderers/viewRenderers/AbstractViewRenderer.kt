@@ -7,13 +7,33 @@ import core.views.View
 import di.inject
 import org.w3c.dom.HTMLElement
 import utils.elementCss.ElementCss
-import utils.elementCss.properties.CssDimen
 import utils.elementCss.properties.CssUnit
 import utils.elementCss.properties.Display
 import utils.elementCss.properties.Visibility
 import utils.extensions.nonNull
 import kotlin.browser.document
 
+/**
+ * This class is the base class for all view renderers.
+ *
+ * It renders common view properties i.e. the properties of the [View] class. The view is rendered by building a
+ * DOM node representing the view.
+ *
+ * The procedure for building the DOM element goes as follows:
+ *  1. An instance of the appropriate HTMLElement is passed to the renderer. Note that the DOM element passed may
+ *  already be built, in this case the renderer is supposed to apply only that view properties that have changed. See
+ *  [reRendering] for more details.
+ *  2. This class applies common view attributes to the DOM element.
+ *  3. The subclassing builder applies the attributes of a specific view type.
+ *  4. The resultant HTMLElement is returned.
+ *
+ *  @param view The view to render
+ *  @param element A HTMLElement that will represent the view.
+ *  @param reRendering If true, this parameter indicates that the [element] passed was already built. This happens
+ *  when a view is already rendered and one of its properties changes later. In this case the renderer should only
+ *  update the element and not rebuild it from scratch.
+ *
+ */
 abstract class AbstractViewRenderer<V: View>(
         protected val view: V,
         protected val element: HTMLElement,

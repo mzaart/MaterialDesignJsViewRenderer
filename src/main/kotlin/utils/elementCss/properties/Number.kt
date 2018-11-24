@@ -1,5 +1,10 @@
 package utils.elementCss.properties
 
+/**
+ * Represents a numerical CSS value.
+ *
+ * This class also supports the css values: auto, initial, inherit
+ */
 class Number(val number: Double): CssValue {
 
     constructor(value: Int): this(value.toDouble())

@@ -8,10 +8,7 @@ import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.events.Event
 import utils.elementCss.ElementCss
 import utils.elementCss.RelativePositioning
-import utils.elementCss.properties.CssDimen
-import utils.elementCss.properties.CssUnit
-import utils.elementCss.properties.Overflow
-import utils.elementCss.properties.Position
+import utils.elementCss.properties.*
 import utils.extensions.applyCss
 import kotlin.browser.document
 import kotlin.browser.window
@@ -27,10 +24,10 @@ class ImageViewRenderer(
 
     override fun buildElement() {
         element.applyCss {
+            display = Display.INLINE_BLOCK
             overflowX.value = Overflow.Value.HIDDEN
             overflowY.value = Overflow.Value.HIDDEN
         }
-        element.addClass("test")
 
         val image = document.createElement("img") as HTMLImageElement
         image.src = view.imageResource
