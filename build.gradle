@@ -12,6 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.71"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.37"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
     }
 }
 
@@ -21,10 +22,10 @@ apply plugin: 'org.jetbrains.dokka'
 
 dokka {
     includes = [
-            'src/main/kotlin/core/renderers/dok.md',
-            'src/main/kotlin/core/renderers/viewRenderers/dok.md',
-            'src/main/kotlin/di/dok.md',
-            'src/main/kotlin/utils/elementCss/dok.md'
+            'src/main/kotlin/view/core/renderers/dok.md',
+            'src/main/kotlin/view/core/renderers/viewRenderers/dok.md',
+            'src/main/kotlin/view/di/dok.md',
+            'src/main/kotlin/view/utils/elementCss/dok.md'
     ]
     outputFormat = 'markdown'
     impliedPlatforms = ["JS"] // This will force platform tags for all non-common sources e.g. "JVM"
@@ -56,8 +57,6 @@ compileKotlin2Js {
     }
 }
 
-
-
 kotlinFrontend {
     downloadNodeJsVersion = 'latest'
 
@@ -76,6 +75,47 @@ repositories {
     }
     jcenter()
     mavenCentral()
+}
+
+group = 'MaterialDesignJsViewRenderer'
+
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+apply from: project.file('pom.gradle')
+apply from: project.file('bintray.gradle')
+
+publishing {
+    publications {
+        mavenProject(MavenPublication) {
+            from components.java
+
+            groupId project.group
+            artifactId project.name
+            version '0.1.0'
+
+            artifact sourcesJar
+
+            withPom(pom)
+        }
+    }
+}
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
 
 dependencies {
