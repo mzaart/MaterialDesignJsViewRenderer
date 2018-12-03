@@ -75,6 +75,9 @@ repositories {
     }
     jcenter()
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/mzaart/View"
+    }
 }
 
 group = 'MaterialDesignJsViewRenderer'
@@ -122,7 +125,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:1.2.60"
     testCompile "org.jetbrains.kotlin:kotlin-test-js"
 
-    compile(name: 'View-js', ext:'jar')
+    //compile(name: 'View-js', ext:'jar')
+    compile(group: 'value: View', name: 'value: View-js', version: 'value: 0.1.0', ext: 'jar', classifier: '')
 
     compile 'org.kodein.di:kodein-di-erased-js:5.2.0'
     compile 'org.kodein.di:kodein-di-conf-js:5.2.0'

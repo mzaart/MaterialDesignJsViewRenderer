@@ -10,7 +10,7 @@ import view.utils.mapBased.keys.delegates.nullable.BoolRWKey
 import view.utils.mapBased.keys.delegates.nullable.EnumRWKey
 import kotlin.browser.document
 
-class ButtonRenderer(
+open class ButtonRenderer(
         view: Button,
         element: HTMLElement,
         reRendering: Boolean = true

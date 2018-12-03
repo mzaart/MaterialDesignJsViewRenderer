@@ -10,7 +10,7 @@ import view.utils.elementCss.properties.*
 import view.utils.extensions.applyCss
 import kotlin.browser.document
 
-class ImageViewRenderer(
+open class ImageViewRenderer(
         view: ImageView,
         element: HTMLElement,
         reRendering: Boolean = true

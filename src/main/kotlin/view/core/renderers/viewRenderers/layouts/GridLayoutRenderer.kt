@@ -11,7 +11,7 @@ import view.utils.elementCss.properties.Display
 import view.utils.elementCss.properties.Position
 import view.utils.extensions.*
 
-class GridLayoutRenderer(
+open class GridLayoutRenderer(
         view: GridLayout,
         element: HTMLElement,
         reRendering: Boolean = true

@@ -10,7 +10,7 @@ import view.utils.elementCss.RelativePositioning
 import view.utils.elementCss.properties.Position
 import kotlin.browser.document
 
-class RelativeLayoutRenderer(
+open class RelativeLayoutRenderer(
         view: RelativeLayout,
         element: HTMLElement,
         reRendering: Boolean = true

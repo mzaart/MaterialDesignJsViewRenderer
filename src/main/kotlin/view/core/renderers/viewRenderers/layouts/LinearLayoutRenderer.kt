@@ -9,7 +9,7 @@ import view.utils.mapBased.keys.HasKeys
 import view.utils.mapBased.keys.delegates.nullable.BoolRWKey
 import kotlin.browser.document
 
-class LinearLayoutRenderer(
+open class LinearLayoutRenderer(
         view: LinearLayout,
         element: HTMLElement,
         reRendering: Boolean = true

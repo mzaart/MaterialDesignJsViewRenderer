@@ -12,7 +12,7 @@ import view.utils.extensions.applyCss
 import view.utils.extensions.nonNull
 import kotlin.browser.document
 
-class TextViewRenderer(
+open class TextViewRenderer(
         view: TextView,
         element: HTMLElement,
         reRendering: Boolean = true
